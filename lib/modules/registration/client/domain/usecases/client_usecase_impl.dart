@@ -1,14 +1,14 @@
 import 'package:barbar_manager/modules/registration/client/domain/entities/client.dart';
 import 'package:barbar_manager/modules/registration/client/domain/errors/client_errors.dart';
-import 'package:barbar_manager/modules/registration/client/domain/repositories/create_client_repository.dart';
-import 'package:barbar_manager/modules/registration/client/domain/usecases/create_client_usecase.dart';
+import 'package:barbar_manager/modules/registration/client/domain/repositories/client_repository.dart';
+import 'package:barbar_manager/modules/registration/client/domain/usecases/client_usecase.dart';
 import 'package:dartz/dartz.dart';
 import 'package:string_validator/string_validator.dart';
 
-class CreateClientUsecaseImpl implements CreateClientUsecase {
-  final CreateClientRepository _repository;
+class ClientUsecaseImpl implements ClientUsecase {
+  final ClientRepository _repository;
 
-  CreateClientUsecaseImpl(this._repository);
+  ClientUsecaseImpl(this._repository);
 
   @override
   Future<Either<ClientErrors, Client>> call(Client client) async {
