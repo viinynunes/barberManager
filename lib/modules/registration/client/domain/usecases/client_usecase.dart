@@ -3,5 +3,7 @@ import 'package:barbar_manager/modules/registration/client/domain/errors/client_
 import 'package:dartz/dartz.dart';
 
 abstract class ClientUsecase {
-  Future<Either<ClientErrors, Client>> call(Client client);
+  Future<Either<ClientErrors, Client>> create(Client client);
+  Future<Either<ClientErrors, Client>> update(Client client);
+  Future<Either<ClientErrors, bool>> delete(Client client);
 }
