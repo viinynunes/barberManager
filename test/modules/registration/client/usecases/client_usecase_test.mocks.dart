@@ -34,9 +34,9 @@ class MockClientRepository extends _i1.Mock implements _i3.ClientRepository {
   }
 
   @override
-  _i4.Future<_i2.Either<_i5.ClientErrors, _i6.Client>> create(
+  _i4.Future<_i2.Either<_i5.ClientErrors, _i6.Client>> createOrUpdate(
           _i6.Client? client) =>
-      (super.noSuchMethod(Invocation.method(#create, [client]),
+      (super.noSuchMethod(Invocation.method(#createOrUpdate, [client]),
           returnValue: Future<_i2.Either<_i5.ClientErrors, _i6.Client>>.value(
               _FakeEither_0<_i5.ClientErrors, _i6.Client>())) as _i4
           .Future<_i2.Either<_i5.ClientErrors, _i6.Client>>);
