@@ -11,13 +11,19 @@ class ClientUsecaseImpl implements ClientUsecase {
   ClientUsecaseImpl(this._repository);
 
   @override
-  Future<Either<ClientErrors, Client>> create(Client client) async {
+  Future<Either<ClientErrors, Client>> createOrUpdate(Client client) async {
     final validator = ValidateClientFields.validate(client);
 
     if (validator.isLeft()) {
       return validator;
     }
 
-    return await _repository.create(client);
+    return await _repository.createOrUpdate(client);
+  }
+
+  @override
+  Future<Either<ClientErrors, bool>> delete(Client client) {
+    // TODO: implement delete
+    throw UnimplementedError();
   }
 }

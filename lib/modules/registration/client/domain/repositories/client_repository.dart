@@ -4,5 +4,5 @@ import 'package:dartz/dartz.dart';
 
 abstract class ClientRepository {
 
-  Future<Either<ClientErrors, Client>> create(Client client);
+  Future<Either<ClientErrors, Client>> createOrUpdate(Client client);
 }
