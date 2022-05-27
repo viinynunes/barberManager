@@ -19,7 +19,7 @@ main() {
     when(repository.createOrUpdate(any))
         .thenAnswer((realInvocation) async => Right(user));
 
-    when(repository.disable(user))
+    when(repository.disable(any))
         .thenAnswer((realInvocation) async => const Right(true));
   });
 
@@ -47,11 +47,14 @@ main() {
       expect(result.fold(id, id), isA<UserRegistrationError>());
     });
 
-    test('should return a UserRegistrationError when fullName is invalid', () async {
-      var result = await usecase.createOrUpdate(User('id', 'A', 'viny@gmail.com', '123456', true));
+    test('should return a UserRegistrationError when fullName is invalid',
+        () async {
+      var result = await usecase
+          .createOrUpdate(User('id', 'A', 'viny@gmail.com', '123456', true));
       expect(result.fold(id, id), isA<UserRegistrationError>());
 
-      result = await usecase.createOrUpdate(User('id', '', 'viny@gmail.com', '123456', true));
+      result = await usecase
+          .createOrUpdate(User('id', '', 'viny@gmail.com', '123456', true));
       expect(result.fold(id, id), isA<UserRegistrationError>());
     });
 
@@ -69,6 +72,31 @@ main() {
 
       result = await usecase
           .createOrUpdate(User('id', 'ze ramalho', 'ze@gmail.com', '', true));
+
+      expect(result.fold(id, id), isA<UserRegistrationError>());
+    });
+  });
+
+  group('tests to disable user on usecase', () {
+    test('should disable a valid user', () async {
+      final result = await usecase.disable(
+          User('id', 'Vinicius Nunes', 'viny@gmail.com', '123456', true));
+
+      expect(result.fold(id, id), isA<bool>());
+      expect(result.fold((l) => null, (r) => r), equals(true));
+    });
+
+    test('should return a UserRegistrationError when ID is invalid', () async {
+      final result = await usecase.disable(
+          User('', 'Vinicius Nunes', 'viny@gmail.com', '123456', true));
+
+      expect(result.fold(id, id), isA<UserRegistrationError>());
+    });
+
+    test('should return a UserRegistrationError when enabled is already false',
+        () async {
+      final result = await usecase.disable(
+          User('1', 'Vinicius Nunes', 'viny@gmail.com', '123456', false));
 
       expect(result.fold(id, id), isA<UserRegistrationError>());
     });
