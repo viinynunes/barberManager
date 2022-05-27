@@ -6,7 +6,7 @@ import 'dart:async' as _i4;
 
 import 'package:barbar_manager/modules/registration/domain/entities/client.dart'
     as _i6;
-import 'package:barbar_manager/modules/registration/domain/errors/client_errors.dart'
+import 'package:barbar_manager/modules/registration/domain/errors/registration_errors.dart'
     as _i5;
 import 'package:barbar_manager/modules/registration/domain/repositories/client_repository.dart'
     as _i3;
@@ -34,16 +34,16 @@ class MockClientRepository extends _i1.Mock implements _i3.ClientRepository {
   }
 
   @override
-  _i4.Future<_i2.Either<_i5.ClientErrors, _i6.Client>> createOrUpdate(
+  _i4.Future<_i2.Either<_i5.RegistrationErrors, _i6.Client>> createOrUpdate(
           _i6.Client? client) =>
       (super.noSuchMethod(Invocation.method(#createOrUpdate, [client]),
-          returnValue: Future<_i2.Either<_i5.ClientErrors, _i6.Client>>.value(
-              _FakeEither_0<_i5.ClientErrors, _i6.Client>())) as _i4
-          .Future<_i2.Either<_i5.ClientErrors, _i6.Client>>);
+          returnValue: Future<_i2.Either<_i5.RegistrationErrors, _i6.Client>>.value(
+              _FakeEither_0<_i5.RegistrationErrors, _i6.Client>())) as _i4
+          .Future<_i2.Either<_i5.RegistrationErrors, _i6.Client>>);
   @override
-  _i4.Future<_i2.Either<_i5.ClientErrors, bool>> delete(_i6.Client? client) =>
+  _i4.Future<_i2.Either<_i5.RegistrationErrors, bool>> delete(_i6.Client? client) =>
       (super.noSuchMethod(Invocation.method(#delete, [client]),
-              returnValue: Future<_i2.Either<_i5.ClientErrors, bool>>.value(
-                  _FakeEither_0<_i5.ClientErrors, bool>()))
-          as _i4.Future<_i2.Either<_i5.ClientErrors, bool>>);
+              returnValue: Future<_i2.Either<_i5.RegistrationErrors, bool>>.value(
+                  _FakeEither_0<_i5.RegistrationErrors, bool>()))
+          as _i4.Future<_i2.Either<_i5.RegistrationErrors, bool>>);
 }

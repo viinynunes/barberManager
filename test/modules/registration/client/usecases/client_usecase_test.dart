@@ -1,5 +1,5 @@
 import 'package:barbar_manager/modules/registration/domain/entities/client.dart';
-import 'package:barbar_manager/modules/registration/domain/errors/client_errors.dart';
+import 'package:barbar_manager/modules/registration/domain/errors/registration_errors.dart';
 import 'package:barbar_manager/modules/registration/domain/repositories/client_repository.dart';
 import 'package:barbar_manager/modules/registration/domain/usecases/impl/client_usecase_impl.dart';
 import 'package:dartz/dartz.dart';
@@ -28,21 +28,21 @@ main() {
       final result = await useCase
           .createOrUpdate(Client('', '19981436342', 'viny@gmail.com', true));
 
-      expect(result.fold(id, id), isA<ClientErrors>());
+      expect(result.fold(id, id), isA<RegistrationErrors>());
     });
 
     test('should return a ClientError when email is invalid', () async {
       final result = await useCase
           .createOrUpdate(Client('nunes', '19981436342', 'viny@', true));
 
-      expect(result.fold(id, id), isA<ClientErrors>());
+      expect(result.fold(id, id), isA<RegistrationErrors>());
     });
 
     test('should return a ClientError when phone is invalid', () async {
       final result = await useCase.createOrUpdate(
           Client('nunes', '22222222a2', 'viny@gmail.com', true));
 
-      expect(result.fold(id, id), isA<ClientErrors>());
+      expect(result.fold(id, id), isA<RegistrationErrors>());
     });
 
     test('should return a Client when is a valid client', () async {
@@ -68,7 +68,7 @@ main() {
       final result = await useCase
           .delete(Client('nunes', '19981436342', 'viny@hotmail.com', false));
 
-      expect(result.fold(id, id), isA<ClientErrors>());
+      expect(result.fold(id, id), isA<RegistrationErrors>());
     });
   });
 }
