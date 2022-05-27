@@ -1,7 +1,7 @@
 import 'package:barbar_manager/modules/registration/client/domain/entities/client.dart';
 import 'package:barbar_manager/modules/registration/client/domain/errors/client_errors.dart';
 import 'package:barbar_manager/modules/registration/client/domain/repositories/client_repository.dart';
-import 'package:barbar_manager/modules/registration/client/domain/usecases/client_usecase_impl.dart';
+import 'package:barbar_manager/modules/registration/client/domain/usecases/impl/client_usecase_impl.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
