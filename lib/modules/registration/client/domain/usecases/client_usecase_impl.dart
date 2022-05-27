@@ -22,8 +22,11 @@ class ClientUsecaseImpl implements ClientUsecase {
   }
 
   @override
-  Future<Either<ClientErrors, bool>> delete(Client client) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<Either<ClientErrors, bool>> delete(Client client) async {
+    if (!client.enabled) {
+      return Left(ClientValidatorError('Client already disabled'));
+    }
+
+    return await _repository.delete(client);
   }
 }
