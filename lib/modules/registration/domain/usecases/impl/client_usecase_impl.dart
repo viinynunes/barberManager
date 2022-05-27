@@ -1,4 +1,3 @@
-
 import 'package:dartz/dartz.dart';
 
 import '../../entities/client.dart';
@@ -13,8 +12,9 @@ class ClientUsecaseImpl implements ClientUsecase {
   ClientUsecaseImpl(this._repository);
 
   @override
-  Future<Either<RegistrationErrors, Client>> createOrUpdate(Client client) async {
-    final validator = ValidateClientFields.validate(client);
+  Future<Either<RegistrationErrors, Client>> createOrUpdate(
+      Client client) async {
+    final validator = ValidateClientFields.createOrUpdateValidator(client);
 
     if (validator.isLeft()) {
       return validator;
@@ -25,8 +25,10 @@ class ClientUsecaseImpl implements ClientUsecase {
 
   @override
   Future<Either<RegistrationErrors, bool>> delete(Client client) async {
-    if (!client.enabled) {
-      return Left(ClientValidatorError('Client already disabled'));
+    final validator = ValidateClientFields.disableValidator(client);
+
+    if (validator.isLeft()) {
+      return validator;
     }
 
     return await _repository.delete(client);
