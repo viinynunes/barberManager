@@ -5,3 +5,9 @@ class ClientValidatorError implements RegistrationErrors {
 
   ClientValidatorError(this.message);
 }
+
+class UserRegistrationError implements RegistrationErrors {
+  final String message;
+
+  UserRegistrationError(this.message);
+}
