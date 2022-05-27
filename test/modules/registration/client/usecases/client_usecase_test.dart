@@ -1,7 +1,7 @@
-import 'package:barbar_manager/modules/registration/client/domain/entities/client.dart';
-import 'package:barbar_manager/modules/registration/client/domain/errors/client_errors.dart';
-import 'package:barbar_manager/modules/registration/client/domain/repositories/client_repository.dart';
-import 'package:barbar_manager/modules/registration/client/domain/usecases/impl/client_usecase_impl.dart';
+import 'package:barbar_manager/modules/registration/domain/entities/client.dart';
+import 'package:barbar_manager/modules/registration/domain/errors/client_errors.dart';
+import 'package:barbar_manager/modules/registration/domain/repositories/client_repository.dart';
+import 'package:barbar_manager/modules/registration/domain/usecases/impl/client_usecase_impl.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
@@ -55,7 +55,6 @@ main() {
   });
 
   group('tests to delete a client', () {
-
     test('should return true when try to delete a client', () async {
       final result = await useCase
           .delete(Client('nunes', '19981436342', 'viny@hotmail.com', true));

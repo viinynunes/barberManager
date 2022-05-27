@@ -4,11 +4,11 @@
 
 import 'dart:async' as _i4;
 
-import 'package:barbar_manager/modules/registration/client/domain/entities/client.dart'
+import 'package:barbar_manager/modules/registration/domain/entities/client.dart'
     as _i6;
-import 'package:barbar_manager/modules/registration/client/domain/errors/client_errors.dart'
+import 'package:barbar_manager/modules/registration/domain/errors/client_errors.dart'
     as _i5;
-import 'package:barbar_manager/modules/registration/client/domain/repositories/client_repository.dart'
+import 'package:barbar_manager/modules/registration/domain/repositories/client_repository.dart'
     as _i3;
 import 'package:dartz/dartz.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;

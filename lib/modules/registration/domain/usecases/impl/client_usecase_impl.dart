@@ -1,9 +1,11 @@
-import 'package:barbar_manager/modules/registration/client/domain/entities/client.dart';
-import 'package:barbar_manager/modules/registration/client/domain/errors/client_errors.dart';
-import 'package:barbar_manager/modules/registration/client/domain/repositories/client_repository.dart';
-import 'package:barbar_manager/modules/registration/client/domain/usecases/client_usecase.dart';
-import 'package:barbar_manager/modules/registration/client/domain/utils/validate_client_fields.dart';
+
 import 'package:dartz/dartz.dart';
+
+import '../../entities/client.dart';
+import '../../errors/client_errors.dart';
+import '../../repositories/client_repository.dart';
+import '../../utils/validate_client_fields.dart';
+import '../client_usecase.dart';
 
 class ClientUsecaseImpl implements ClientUsecase {
   final ClientRepository _repository;
