@@ -10,6 +10,10 @@ class ValidateUserFields {
       return Left(UserRegistrationError('Invalid Email'));
     }
 
+    if(user.fullName.isEmpty || user.fullName.length < 2){
+      return Left(UserRegistrationError('Invalid Full Name'));
+    }
+
     if(user.password.isEmpty || user.password.length < 6){
       return Left(UserRegistrationError('Invalid Password'));
     }
