@@ -47,6 +47,14 @@ main() {
       expect(result.fold(id, id), isA<UserRegistrationError>());
     });
 
+    test('should return a UserRegistrationError when fullName is invalid', () async {
+      var result = await usecase.createOrUpdate(User('id', 'A', 'viny@gmail.com', '123456', true));
+      expect(result.fold(id, id), isA<UserRegistrationError>());
+
+      result = await usecase.createOrUpdate(User('id', '', 'viny@gmail.com', '123456', true));
+      expect(result.fold(id, id), isA<UserRegistrationError>());
+    });
+
     test('should return a UserRegistrationError when password is invalid',
         () async {
       var result = await usecase.createOrUpdate(
