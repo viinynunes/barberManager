@@ -12,7 +12,7 @@ class UserUsecaseImpl implements UserUsecase {
 
   @override
   Future<Either<UserRegistrationError, User>> createOrUpdate(User user) async {
-    final validator = ValidateUserFields.validate(user);
+    final validator = ValidateUserFields.createOrUpdateValidator(user);
 
     if (validator.isLeft()) {
       return validator;
@@ -22,8 +22,13 @@ class UserUsecaseImpl implements UserUsecase {
   }
 
   @override
-  Future<Either<UserRegistrationError, bool>> disable(User user) {
-    // TODO: implement disable
-    throw UnimplementedError();
+  Future<Either<UserRegistrationError, bool>> disable(User user) async {
+    final validator = ValidateUserFields.disableValidator(user);
+
+    if (validator.isLeft()) {
+      return validator;
+    }
+
+    return _repository.disable(user);
   }
 }
