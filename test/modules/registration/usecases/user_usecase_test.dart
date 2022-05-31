@@ -1,16 +1,13 @@
 import 'package:barbar_manager/modules/registration/domain/entities/establishment.dart';
 import 'package:barbar_manager/modules/registration/domain/entities/user.dart';
 import 'package:barbar_manager/modules/registration/domain/errors/registration_errors.dart';
-import 'package:barbar_manager/modules/registration/domain/repositories/user_repository.dart';
 import 'package:barbar_manager/modules/registration/domain/usecases/impl/user_usercase_impl.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'user_usecase_test.mocks.dart';
+import '../repositories/repositories_mock.mocks.dart';
 
-@GenerateMocks([UserRepository])
 main() {
   final repository = MockUserRepository();
   final usecase = UserUsecaseImpl(repository);
