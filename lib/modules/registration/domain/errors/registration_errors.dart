@@ -17,3 +17,10 @@ class EstablishmentRegistrationError implements RegistrationErrors {
 
   EstablishmentRegistrationError(this.message);
 }
+
+class DepartmentRegistrationError implements RegistrationErrors {
+  final String message;
+
+  DepartmentRegistrationError(this.message);
+}
+
