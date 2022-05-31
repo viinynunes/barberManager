@@ -11,3 +11,9 @@ class UserRegistrationError implements RegistrationErrors {
 
   UserRegistrationError(this.message);
 }
+
+class EstablishmentRegistrationError implements RegistrationErrors {
+  final String message;
+
+  EstablishmentRegistrationError(this.message);
+}
