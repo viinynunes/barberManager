@@ -2,8 +2,9 @@ import 'package:barbar_manager/modules/registration/domain/entities/establishmen
 import 'package:barbar_manager/modules/registration/domain/errors/registration_errors.dart';
 import 'package:barbar_manager/modules/registration/domain/repositories/establishment_repository.dart';
 import 'package:barbar_manager/modules/registration/domain/usecases/establishment_usecase.dart';
-import 'package:barbar_manager/modules/registration/domain/utils/validate_establishment_fields.dart';
 import 'package:dartz/dartz.dart';
+
+import '../../validations/validate_establishment_fields.dart';
 
 class EstablishmentUsecaseImpl implements EstablishmentUsecase {
   final EstablishmentRepository _repository;
