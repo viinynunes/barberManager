@@ -6,9 +6,10 @@ class Item {
   final String description;
   final double price;
   final String imgUrl;
+  final bool enabled;
 
   final Department department;
 
   Item(this.id, this.name, this.description, this.price, this.imgUrl,
-      this.department);
+      this.enabled, this.department);
 }
