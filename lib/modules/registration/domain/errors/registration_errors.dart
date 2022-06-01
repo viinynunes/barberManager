@@ -24,3 +24,9 @@ class DepartmentRegistrationError implements RegistrationErrors {
   DepartmentRegistrationError(this.message);
 }
 
+class ItemRegistrationError implements RegistrationErrors {
+  final String message;
+
+  ItemRegistrationError(this.message);
+}
+
