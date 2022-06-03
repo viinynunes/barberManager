@@ -21,6 +21,12 @@ class ValidateItemFields {
       return Left(ItemRegistrationError('Invalid image url'));
     }
 
+    if (item.registrationDate.hour.isNegative ||
+        item.registrationDate.minute.isNegative ||
+        item.registrationDate.second.isNegative) {
+      return Left(ItemRegistrationError('Invalid Registration Date'));
+    }
+
     if (item.department.id.isEmpty || !item.department.enabled) {
       return Left(ItemRegistrationError('Invalid Department'));
     }
