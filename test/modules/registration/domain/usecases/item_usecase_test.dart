@@ -1,5 +1,6 @@
 import 'package:barbar_manager/modules/registration/domain/entities/department.dart';
 import 'package:barbar_manager/modules/registration/domain/entities/item.dart';
+import 'package:barbar_manager/modules/registration/domain/entities/reservation.dart';
 import 'package:barbar_manager/modules/registration/domain/errors/registration_errors.dart';
 import 'package:barbar_manager/modules/registration/domain/usecases/impl/item_usecase_impl.dart';
 import 'package:dartz/dartz.dart';
@@ -12,16 +13,29 @@ main() {
   final repository = MockItemRepository();
   final usecase = ItemUsecaseImpl(repository);
   final department = Department('id', 'Shop', 'All products', true);
+  final reservation = Reservation(
+      'ID',
+      'Wash masculine hair',
+      'Wash masculine hair with shampoo',
+      15.00,
+      'https://google.images.com/shampoo.png',
+      DateTime.now(),
+      true,
+      department,
+      DateTime(2022, 06, 1, 15, 30));
 
   setUpAll(() {
     final item = Item('id', 'shampoo', 'shampoo for man', 20.00,
-        'https://google.images.com/shampoo', true, department);
+        'https://google.images.com/shampoo', DateTime.now(), true, department);
 
     when(repository.createOrUpdate(any))
         .thenAnswer((realInvocation) async => Right(item));
 
     when(repository.disable(any))
         .thenAnswer((realInvocation) async => const Right(true));
+
+    when(repository.createOrUpdate(reservation))
+        .thenAnswer((realInvocation) async => Right(reservation));
   });
 
   group('tests to create or update item usecase', () {
@@ -33,6 +47,7 @@ main() {
           'water to wash your hair',
           5.00,
           'https://google.images.com/shampoo',
+          DateTime.now(),
           true,
           department));
 
@@ -48,6 +63,7 @@ main() {
           'water to wash your hair',
           5.00,
           'https://google.images.com/shampoo',
+          DateTime.now(),
           true,
           department));
 
@@ -59,6 +75,7 @@ main() {
           'water to wash your hair',
           5.00,
           'https://google.images.com/shampoo',
+          DateTime.now(),
           true,
           department));
 
@@ -67,8 +84,15 @@ main() {
 
     test('should return an ItemRegistrationError when description is invalid',
         () async {
-      final result = await usecase.createOrUpdate(Item('id', 'water', '', 5.00,
-          'https://google.images.com/shampoo', true, department));
+      final result = await usecase.createOrUpdate(Item(
+          'id',
+          'water',
+          '',
+          5.00,
+          'https://google.images.com/shampoo',
+          DateTime.now(),
+          true,
+          department));
 
       expect(result.fold(id, id), isA<ItemRegistrationError>());
     });
@@ -81,6 +105,7 @@ main() {
           'water to wash your hair',
           -5.00,
           'https://google.images.com/shampoo',
+          DateTime.now(),
           true,
           department));
 
@@ -89,8 +114,15 @@ main() {
 
     test('should return an ItemRegistrationError when image url is invalid',
         () async {
-      var result = await usecase.createOrUpdate(Item('id', 'water',
-          'water to wash your hair', 5.00, '', true, department));
+      var result = await usecase.createOrUpdate(Item(
+          'id',
+          'water',
+          'water to wash your hair',
+          5.00,
+          '',
+          DateTime.now(),
+          true,
+          department));
 
       expect(result.fold(id, id), isA<ItemRegistrationError>());
     });
@@ -98,16 +130,63 @@ main() {
     test('should return an ItemRegistrationError when Department is invalid',
         () async {
       final testDep = Department('', 'Shop', 'Shoping something', true);
-      var result = await usecase.createOrUpdate(Item(
-          'id', 'water', 'water to wash your hair', 5.00, '', true, testDep));
+      var result = await usecase.createOrUpdate(Item('id', 'water',
+          'water to wash your hair', 5.00, '', DateTime.now(), true, testDep));
 
       expect(result.fold(id, id), isA<ItemRegistrationError>());
 
       final testDepDisable =
           Department('aaaaa', 'Shop', 'Shoping something', false);
 
-      result = await usecase.createOrUpdate(Item('id', 'water',
-          'water to wash your hair', 5.00, '', true, testDepDisable));
+      result = await usecase.createOrUpdate(Item(
+          'id',
+          'water',
+          'water to wash your hair',
+          5.00,
+          '',
+          DateTime.now(),
+          true,
+          testDepDisable));
+
+      expect(result.fold(id, id), isA<ItemRegistrationError>());
+    });
+
+    test(
+        'should return an ItemRegistrationError when registration Date is has a negative number',
+        () async {
+      var result = await usecase.createOrUpdate(Item(
+          'id',
+          'water',
+          'water to wash your hair',
+          5.00,
+          '',
+          DateTime(-2022, 10, 2),
+          true,
+          department));
+
+      expect(result.fold(id, id), isA<ItemRegistrationError>());
+
+      result = await usecase.createOrUpdate(Item(
+          'id',
+          'water',
+          'water to wash your hair',
+          5.00,
+          '',
+          DateTime(2022, -10, 2),
+          true,
+          department));
+
+      expect(result.fold(id, id), isA<ItemRegistrationError>());
+
+      result = await usecase.createOrUpdate(Item(
+          'id',
+          'water',
+          'water to wash your hair',
+          5.00,
+          '',
+          DateTime(2022, 10, 2),
+          true,
+          department));
 
       expect(result.fold(id, id), isA<ItemRegistrationError>());
     });
@@ -123,6 +202,7 @@ main() {
           'shampoo for man',
           5,
           'https://google.images.com/shampoo.png',
+          DateTime.now(),
           true,
           testDep));
 
@@ -137,6 +217,7 @@ main() {
           'Shampoo for man',
           5,
           'https://google.images.com/shampoo.png',
+          DateTime.now(),
           true,
           testDep));
 
@@ -152,6 +233,7 @@ main() {
           'Shampoo for man',
           5,
           'https://google.images.com/shampoo.png',
+          DateTime.now(),
           false,
           testDep));
 
