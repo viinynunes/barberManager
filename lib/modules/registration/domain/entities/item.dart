@@ -6,10 +6,11 @@ class Item {
   final String description;
   final double price;
   final String imgUrl;
+  final DateTime registrationDate;
   final bool enabled;
 
   final Department department;
 
-  Item(this.id, this.name, this.description, this.price, this.imgUrl,
+  Item(this.id, this.name, this.description, this.price, this.imgUrl, this.registrationDate,
       this.enabled, this.department);
 }
