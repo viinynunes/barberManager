@@ -12,8 +12,6 @@ import 'package:barbar_manager/modules/registration/domain/entities/establishmen
     as _i10;
 import 'package:barbar_manager/modules/registration/domain/entities/item.dart'
     as _i14;
-import 'package:barbar_manager/modules/registration/domain/entities/reservation.dart'
-    as _i16;
 import 'package:barbar_manager/modules/registration/domain/entities/user.dart'
     as _i8;
 import 'package:barbar_manager/modules/registration/domain/errors/registration_errors.dart'
@@ -26,8 +24,6 @@ import 'package:barbar_manager/modules/registration/domain/repositories/establis
     as _i9;
 import 'package:barbar_manager/modules/registration/domain/repositories/item_repository.dart'
     as _i13;
-import 'package:barbar_manager/modules/registration/domain/repositories/reservation_repository.dart'
-    as _i15;
 import 'package:barbar_manager/modules/registration/domain/repositories/user_repository.dart'
     as _i7;
 import 'package:dartz/dartz.dart' as _i2;
@@ -161,32 +157,6 @@ class MockItemRepository extends _i1.Mock implements _i13.ItemRepository {
   _i4.Future<_i2.Either<_i5.RegistrationErrors, bool>> disable(
           _i14.Item? item) =>
       (super.noSuchMethod(Invocation.method(#disable, [item]),
-          returnValue: Future<_i2.Either<_i5.RegistrationErrors, bool>>.value(
-              _FakeEither_0<_i5.RegistrationErrors, bool>())) as _i4
-          .Future<_i2.Either<_i5.RegistrationErrors, bool>>);
-}
-
-/// A class which mocks [ReservationRepository].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockReservationRepository extends _i1.Mock
-    implements _i15.ReservationRepository {
-  MockReservationRepository() {
-    _i1.throwOnMissingStub(this);
-  }
-
-  @override
-  _i4.Future<_i2.Either<_i5.RegistrationErrors, _i14.Item>> createOrUpdate(
-          _i16.Reservation? reservation) =>
-      (super.noSuchMethod(Invocation.method(#createOrUpdate, [reservation]),
-              returnValue:
-                  Future<_i2.Either<_i5.RegistrationErrors, _i14.Item>>.value(
-                      _FakeEither_0<_i5.RegistrationErrors, _i14.Item>()))
-          as _i4.Future<_i2.Either<_i5.RegistrationErrors, _i14.Item>>);
-  @override
-  _i4.Future<_i2.Either<_i5.RegistrationErrors, bool>> disable(
-          _i16.Reservation? reservation) =>
-      (super.noSuchMethod(Invocation.method(#disable, [reservation]),
           returnValue: Future<_i2.Either<_i5.RegistrationErrors, bool>>.value(
               _FakeEither_0<_i5.RegistrationErrors, bool>())) as _i4
           .Future<_i2.Either<_i5.RegistrationErrors, bool>>);
