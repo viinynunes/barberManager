@@ -2,7 +2,7 @@ import 'package:barbar_manager/modules/registration/domain/entities/item.dart';
 import 'package:barbar_manager/modules/registration/domain/errors/registration_errors.dart';
 import 'package:barbar_manager/modules/registration/domain/repositories/item_repository.dart';
 import 'package:barbar_manager/modules/registration/domain/usecases/item_usecase.dart';
-import 'package:barbar_manager/modules/registration/domain/validations/validate_item_fields.dart';
+import 'package:barbar_manager/modules/registration/domain/usecases/validations/validate_item_fields.dart';
 import 'package:dartz/dartz.dart';
 
 class ItemUsecaseImpl implements ItemUsecase {

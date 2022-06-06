@@ -2,7 +2,7 @@ import 'package:barbar_manager/modules/registration/domain/entities/department.d
 import 'package:barbar_manager/modules/registration/domain/errors/registration_errors.dart';
 import 'package:barbar_manager/modules/registration/domain/repositories/department_repository.dart';
 import 'package:barbar_manager/modules/registration/domain/usecases/department_usecase.dart';
-import 'package:barbar_manager/modules/registration/domain/validations/validate_department_fields.dart';
+import 'package:barbar_manager/modules/registration/domain/usecases/validations/validate_department_fields.dart';
 import 'package:dartz/dartz.dart';
 
 class DepartmentUsecaseImpl implements DepartmentUsecase {

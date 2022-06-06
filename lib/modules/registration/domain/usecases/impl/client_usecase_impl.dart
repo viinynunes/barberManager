@@ -3,8 +3,8 @@ import 'package:dartz/dartz.dart';
 import '../../entities/client.dart';
 import '../../errors/registration_errors.dart';
 import '../../repositories/client_repository.dart';
-import '../../validations/validate_client_fields.dart';
 import '../client_usecase.dart';
+import '../validations/validate_client_fields.dart';
 
 class ClientUsecaseImpl implements ClientUsecase {
   final ClientRepository _repository;

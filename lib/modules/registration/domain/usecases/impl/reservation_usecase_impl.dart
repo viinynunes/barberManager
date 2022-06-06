@@ -3,8 +3,8 @@ import 'package:barbar_manager/modules/registration/domain/entities/reservation.
 import 'package:barbar_manager/modules/registration/domain/errors/registration_errors.dart';
 import 'package:barbar_manager/modules/registration/domain/repositories/item_repository.dart';
 import 'package:barbar_manager/modules/registration/domain/usecases/item_usecase.dart';
-import 'package:barbar_manager/modules/registration/domain/validations/validate_item_fields.dart';
-import 'package:barbar_manager/modules/registration/domain/validations/validate_reservation_fields.dart';
+import 'package:barbar_manager/modules/registration/domain/usecases/validations/validate_item_fields.dart';
+import 'package:barbar_manager/modules/registration/domain/usecases/validations/validate_reservation_fields.dart';
 import 'package:dartz/dartz.dart';
 
 class ReservationItemUsecaseImpl implements ItemUsecase {

@@ -2,7 +2,7 @@ import 'package:barbar_manager/modules/registration/domain/entities/item.dart';
 import 'package:barbar_manager/modules/registration/domain/entities/reservation.dart';
 import 'package:dartz/dartz.dart';
 
-import '../errors/registration_errors.dart';
+import '../../errors/registration_errors.dart';
 
 class ValidateReservationFields {
   static Either<ItemRegistrationError, Item> createOrUpdateValidation(

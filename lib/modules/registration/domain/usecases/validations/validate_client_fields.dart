@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:string_validator/string_validator.dart';
 
-import '../entities/client.dart';
-import '../errors/registration_errors.dart';
+import '../../entities/client.dart';
+import '../../errors/registration_errors.dart';
 
 class ValidateClientFields {
   static Either<RegistrationErrors, Client> createOrUpdateValidator(

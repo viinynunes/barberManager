@@ -4,7 +4,7 @@ import 'package:barbar_manager/modules/registration/domain/repositories/user_rep
 import 'package:barbar_manager/modules/registration/domain/usecases/user_usecase.dart';
 import 'package:dartz/dartz.dart';
 
-import '../../validations/validate_user_fields.dart';
+import '../../usecases/validations/validate_user_fields.dart';
 
 class UserUsecaseImpl implements UserUsecase {
   final UserRepository _repository;

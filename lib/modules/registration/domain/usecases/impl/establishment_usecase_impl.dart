@@ -4,7 +4,7 @@ import 'package:barbar_manager/modules/registration/domain/repositories/establis
 import 'package:barbar_manager/modules/registration/domain/usecases/establishment_usecase.dart';
 import 'package:dartz/dartz.dart';
 
-import '../../validations/validate_establishment_fields.dart';
+import '../../usecases/validations/validate_establishment_fields.dart';
 
 class EstablishmentUsecaseImpl implements EstablishmentUsecase {
   final EstablishmentRepository _repository;
