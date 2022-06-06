@@ -7,15 +7,16 @@ import 'package:dartz/dartz.dart';
 
 class ItemUsecaseImpl implements ItemUsecase {
   final ItemRepository _repository;
+  final _validator = ValidateItemFields();
 
   ItemUsecaseImpl(this._repository);
 
   @override
   Future<Either<RegistrationErrors, Item>> createOrUpdate(Item item) async {
-    final validator = ValidateItemFields.createOrUpdateValidation(item);
+    final result = _validator.createOrUpdateValidation(item);
 
-    if (validator.isLeft()) {
-      return validator;
+    if (result.isLeft()) {
+      return result;
     }
 
     return await _repository.createOrUpdate(item);
@@ -23,10 +24,10 @@ class ItemUsecaseImpl implements ItemUsecase {
 
   @override
   Future<Either<RegistrationErrors, bool>> disable(Item item) async {
-    final validator = ValidateItemFields.disableValidation(item);
+    final result = _validator.disableValidation(item);
 
-    if (validator.isLeft()) {
-      return validator;
+    if (result.isLeft()) {
+      return result;
     }
 
     return await _repository.disable(item);

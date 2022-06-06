@@ -3,8 +3,7 @@ import 'package:barbar_manager/modules/registration/domain/errors/registration_e
 import 'package:dartz/dartz.dart';
 
 class ValidateItemFields {
-  static Either<ItemRegistrationError, Item> createOrUpdateValidation(
-      Item item) {
+  Either<ItemRegistrationError, Item> createOrUpdateValidation(Item item) {
     if (item.name.isEmpty || item.name.length < 2) {
       return Left(ItemRegistrationError('Invalid Name'));
     }
@@ -34,7 +33,7 @@ class ValidateItemFields {
     return Right(item);
   }
 
-  static Either<ItemRegistrationError, bool> disableValidation(Item item) {
+  Either<ItemRegistrationError, bool> disableValidation(Item item) {
     if (item.id.isEmpty) {
       return Left(ItemRegistrationError('Invalid ID'));
     }

@@ -3,30 +3,29 @@ import 'package:barbar_manager/modules/registration/domain/entities/reservation.
 import 'package:barbar_manager/modules/registration/domain/errors/registration_errors.dart';
 import 'package:barbar_manager/modules/registration/domain/repositories/item_repository.dart';
 import 'package:barbar_manager/modules/registration/domain/usecases/item_usecase.dart';
-import 'package:barbar_manager/modules/registration/domain/usecases/validations/validate_item_fields.dart';
 import 'package:barbar_manager/modules/registration/domain/usecases/validations/validate_reservation_fields.dart';
 import 'package:dartz/dartz.dart';
 
 class ReservationItemUsecaseImpl implements ItemUsecase {
   final ItemRepository _repository;
+  final _validator = ValidateReservationFields();
 
   ReservationItemUsecaseImpl(this._repository);
 
   @override
   Future<Either<RegistrationErrors, Item>> createOrUpdate(
       Item reservationItem) async {
-    var validator =
-        ValidateItemFields.createOrUpdateValidation(reservationItem);
+    var result = _validator.createOrUpdateValidation(reservationItem);
 
-    if (validator.isLeft()) {
-      return validator;
+    if (result.isLeft()) {
+      return result;
     }
 
-    validator = ValidateReservationFields.createOrUpdateValidation(
-        reservationItem as Reservation);
+    result =
+        _validator.registrationHourValidation(reservationItem as Reservation);
 
-    if (validator.isLeft()) {
-      return validator;
+    if (result.isLeft()) {
+      return result;
     }
 
     return await _repository.createOrUpdate(reservationItem);
@@ -34,10 +33,10 @@ class ReservationItemUsecaseImpl implements ItemUsecase {
 
   @override
   Future<Either<RegistrationErrors, bool>> disable(Item reservation) async {
-    var validator = ValidateItemFields.disableValidation(reservation);
+    var result = _validator.disableValidation(reservation);
 
-    if (validator.isLeft()) {
-      return validator;
+    if (result.isLeft()) {
+      return result;
     }
 
     return await _repository.disable(reservation);

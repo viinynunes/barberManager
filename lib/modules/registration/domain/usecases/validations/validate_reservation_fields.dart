@@ -1,11 +1,12 @@
 import 'package:barbar_manager/modules/registration/domain/entities/item.dart';
 import 'package:barbar_manager/modules/registration/domain/entities/reservation.dart';
+import 'package:barbar_manager/modules/registration/domain/usecases/validations/validate_item_fields.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../errors/registration_errors.dart';
 
-class ValidateReservationFields {
-  static Either<ItemRegistrationError, Item> createOrUpdateValidation(
+class ValidateReservationFields extends ValidateItemFields {
+  Either<ItemRegistrationError, Item> registrationHourValidation(
       Reservation reservation) {
     if (reservation.reservationDate.isBefore(DateTime.now())) {
       return Left(ItemRegistrationError('Date cannot be before now'));
