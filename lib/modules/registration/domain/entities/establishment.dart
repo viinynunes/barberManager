@@ -1,19 +1,19 @@
 import 'package:barbar_manager/modules/registration/domain/entities/user.dart';
 
 class Establishment {
-  final String id;
-  final String name;
-  final String email;
-  final String description;
-  final String imgUrl;
-  final DateTime? openTime;
-  final DateTime? closeTime;
+  String id;
+  String name;
+  String email;
+  String description;
+  String imgUrl;
+  DateTime? openTime;
+  DateTime? closeTime;
 
-  final List<User> _userList = [];
+  List<User> userList = [];
 
   Establishment(this.id, this.name, this.email, this.description, this.imgUrl, this.openTime, this.closeTime);
 
-  addUser(User user) => _userList.add(user);
+  addUser(User user) => userList.add(user);
 
-  removeUser(User user) => _userList.remove(user);
+  removeUser(User user) => userList.remove(user);
 }

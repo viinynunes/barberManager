@@ -11,17 +11,37 @@ main() {
   final repository = MockEstablishmentRepository();
   final usecase = EstablishmentUsecaseImpl(repository);
 
-  setUpAll(() {
-    final establishment = Establishment('aaa', 'taurus', 'taurus@gmail.com',
-        'taurus barber shop', 'https://google.images.com/taurus');
+  late Establishment establishmentTest;
+
+  setUp(() {
+    establishmentTest = Establishment(
+        'aaa',
+        'taurus',
+        'taurus@gmail.com',
+        'taurus barber shop',
+        'https://google.images.com/taurus',
+        DateTime(2020, 05, 10, 08, 00),
+        DateTime(2020, 05, 10, 18, 30));
+
     when(repository.createOrUpdate(any))
-        .thenAnswer((realInvocation) async => Right(establishment));
+        .thenAnswer((realInvocation) async => Right(establishmentTest));
   });
 
   group('testes to create or update establishment usecase', () {
     test('should return a establishment when everything is correct', () async {
-      final result = await usecase.createOrUpdate(Establishment('id', 'Bulls',
-          'teste@hotmail.com', 'bulls barber shop', 'https://bulls.com'));
+      final result = await usecase.createOrUpdate(establishmentTest);
+
+      expect(result.fold(id, id), isA<Establishment>());
+      expect(result.fold((l) => null, (r) => r.name), equals('taurus'));
+    });
+
+    test(
+        'should return a establishment when open and close time is null',
+        () async {
+      establishmentTest.openTime = null;
+      establishmentTest.closeTime = null;
+
+      final result = await usecase.createOrUpdate(establishmentTest);
 
       expect(result.fold(id, id), isA<Establishment>());
       expect(result.fold((l) => null, (r) => r.name), equals('taurus'));
@@ -29,26 +49,29 @@ main() {
 
     test('should return a EstablishmentRegistrationError when name is invalid',
         () async {
-      var result = await usecase.createOrUpdate(Establishment('id', '',
-          'teste@hotmail.com', 'bulls barber shop', 'https://bulls.com'));
+      establishmentTest.name = '';
+      var result = await usecase.createOrUpdate(establishmentTest);
 
       expect(result.fold(id, id), isA<EstablishmentRegistrationError>());
 
-      result = await usecase.createOrUpdate(Establishment('id', 'T',
-          'teste@hotmail.com', 'bulls barber shop', 'https://bulls.com'));
+      establishmentTest.name = 'T';
+
+      result = await usecase.createOrUpdate(establishmentTest);
 
       expect(result.fold(id, id), isA<EstablishmentRegistrationError>());
     });
 
     test('should return a EstablishmentRegistrationError when email is invalid',
         () async {
-      var result = await usecase.createOrUpdate(Establishment('id', 'Taurus',
-          'teste@.com', 'bulls barber shop', 'https://bulls.com'));
+      establishmentTest.email = 'teste@.com';
+
+      var result = await usecase.createOrUpdate(establishmentTest);
 
       expect(result.fold(id, id), isA<EstablishmentRegistrationError>());
 
-      result = await usecase.createOrUpdate(Establishment('id', 'Taurus',
-          'teste@hotmail.', 'bulls barber shop', 'https://bulls.com'));
+      establishmentTest.email = 'teste@hotmail.';
+
+      result = await usecase.createOrUpdate(establishmentTest);
 
       expect(result.fold(id, id), isA<EstablishmentRegistrationError>());
     });
@@ -56,8 +79,9 @@ main() {
     test(
         'should return a EstablishmentRegistrationError when description is invalid',
         () async {
-      var result = await usecase.createOrUpdate(Establishment(
-          'id', 'Taurus', 'taurus@gmail.com', '', 'https://bulls.com'));
+      establishmentTest.description = '';
+
+      var result = await usecase.createOrUpdate(establishmentTest);
 
       expect(result.fold(id, id), isA<EstablishmentRegistrationError>());
     });
@@ -65,10 +89,16 @@ main() {
     test(
         'should return a EstablishmentRegistrationError when img url is invalid',
         () async {
-      var result = await usecase.createOrUpdate(Establishment(
-          'id', 'Taurus', 'taurus@gmail.com', 'taurus barber shop', ''));
+      establishmentTest.imgUrl = '';
+      var result = await usecase.createOrUpdate(establishmentTest);
 
       expect(result.fold(id, id), isA<EstablishmentRegistrationError>());
+    });
+
+    test(
+        'should return a EstablishmentRegistrationError when open time is negative',
+        () async {
+      establishmentTest.openTime = null;
     });
   });
 }
