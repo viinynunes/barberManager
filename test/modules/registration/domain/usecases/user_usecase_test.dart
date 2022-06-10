@@ -11,8 +11,14 @@ import '../repositories/repositories_mock.mocks.dart';
 main() {
   final repository = MockUserRepository();
   final usecase = UserUsecaseImpl(repository);
-  final establishment = Establishment('id', 'tourus', 'taurus@gmail.com',
-      'taurus barbar shop', 'https://google.images.com/barber');
+  final establishment = Establishment(
+      'id',
+      'tourus',
+      'taurus@gmail.com',
+      'taurus barbar shop',
+      'https://google.images.com/barber',
+      DateTime.now(),
+      DateTime.now());
 
   setUpAll(() {
     final user = User(
