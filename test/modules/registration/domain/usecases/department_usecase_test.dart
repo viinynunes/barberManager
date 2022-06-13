@@ -10,10 +10,9 @@ import '../repositories/repositories_mock.mocks.dart';
 main() {
   final repository = MockDepartmentRepository();
   final usecase = DepartmentUsecaseImpl(repository);
+  late Department department;
 
   setUpAll(() {
-    final department = Department('id', 'Shop', 'Products in sale', true);
-
     when(repository.createOrUpdate(any))
         .thenAnswer((realInvocation) async => Right(department));
 
@@ -21,12 +20,15 @@ main() {
         .thenAnswer((realInvocation) async => const Right(true));
   });
 
+  setUp(() {
+    department = Department('id', 'Shop', 'Products in sale', true);
+  });
+
   group('tests to create or update department usecase', () {
     test(
         'should return a department from repository when everything is correct',
         () async {
-      final result = await usecase
-          .createOrUpdate(Department('id', 'Hair', 'Hair services', true));
+      final result = await usecase.createOrUpdate(department);
 
       expect(result.fold(id, id), isA<Department>());
       expect(result.fold((l) => null, (r) => r.name), equals('Shop'));
@@ -34,28 +36,29 @@ main() {
 
     test('should return a DepartmentRegistrationError when name is invalid',
         () async {
-      var result = await usecase
-          .createOrUpdate(Department('id', '', 'Hair services', true));
+      department.name = '';
+
+      var result = await usecase.createOrUpdate(department);
 
       expect(result.fold(id, id), isA<DepartmentRegistrationError>());
 
-      result = await usecase
-          .createOrUpdate(Department('id', '1', 'Hair services', true));
+      department.name = '1';
+
+      result = await usecase.createOrUpdate(department);
 
       expect(result.fold(id, id), isA<DepartmentRegistrationError>());
+      expect(result.fold((l) => l.message, (r) => null), equals('Invalid name'));
     });
 
     test(
         'should return a DepartmentRegistrationError when description is invalid',
         () async {
-      var result = await usecase
-          .createOrUpdate(Department('id', '', 'Hair services', true));
+      department.description = '';
+
+      final result = await usecase.createOrUpdate(department);
 
       expect(result.fold(id, id), isA<DepartmentRegistrationError>());
-
-      result = await usecase.createOrUpdate(Department('id', '1', '', true));
-
-      expect(result.fold(id, id), isA<DepartmentRegistrationError>());
+      expect(result.fold((l) => l.message, (r) => null), equals('Invalid description'));
     });
   });
 }

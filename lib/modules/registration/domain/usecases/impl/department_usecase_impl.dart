@@ -11,7 +11,7 @@ class DepartmentUsecaseImpl implements DepartmentUsecase {
   DepartmentUsecaseImpl(this._repository);
 
   @override
-  Future<Either<RegistrationErrors, Department>> createOrUpdate(
+  Future<Either<DepartmentRegistrationError, Department>> createOrUpdate(
       Department department) async {
     final validator =
         ValidateDepartmentFields.createOrUpdateValidation(department);

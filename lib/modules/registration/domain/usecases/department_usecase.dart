@@ -3,7 +3,7 @@ import 'package:barbar_manager/modules/registration/domain/errors/registration_e
 import 'package:dartz/dartz.dart';
 
 abstract class DepartmentUsecase {
-  Future<Either<RegistrationErrors, Department>> createOrUpdate(
+  Future<Either<DepartmentRegistrationError, Department>> createOrUpdate(
       Department department);
 
   Future<Either<RegistrationErrors, bool>> disable(Department department);

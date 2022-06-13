@@ -121,13 +121,14 @@ class MockDepartmentRepository extends _i1.Mock
   }
 
   @override
-  _i4.Future<_i2.Either<_i5.RegistrationErrors, _i12.Department>>
-      createOrUpdate(_i12.Department? department) => (super.noSuchMethod(
-          Invocation.method(#createOrUpdate, [department]),
-          returnValue: Future<
-                  _i2.Either<_i5.RegistrationErrors, _i12.Department>>.value(
-              _FakeEither_0<_i5.RegistrationErrors, _i12.Department>())) as _i4
-          .Future<_i2.Either<_i5.RegistrationErrors, _i12.Department>>);
+  _i4.Future<_i2.Either<_i5.DepartmentRegistrationError, _i12.Department>>
+      createOrUpdate(_i12.Department? department) =>
+          (super.noSuchMethod(Invocation.method(#createOrUpdate, [department]),
+              returnValue:
+                  Future<_i2.Either<_i5.DepartmentRegistrationError, _i12.Department>>.value(
+                      _FakeEither_0<_i5.DepartmentRegistrationError,
+                          _i12.Department>())) as _i4
+              .Future<_i2.Either<_i5.DepartmentRegistrationError, _i12.Department>>);
   @override
   _i4.Future<_i2.Either<_i5.RegistrationErrors, bool>> disable(
           _i12.Department? department) =>
