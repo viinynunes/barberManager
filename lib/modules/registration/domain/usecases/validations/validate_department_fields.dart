@@ -3,7 +3,7 @@ import 'package:barbar_manager/modules/registration/domain/errors/registration_e
 import 'package:dartz/dartz.dart';
 
 class ValidateDepartmentFields {
-  static Either<RegistrationErrors, Department> createOrUpdateValidation(
+  static Either<DepartmentRegistrationError, Department> createOrUpdateValidation(
       Department department) {
     if (department.name.isEmpty || department.name.length < 2) {
       return Left(DepartmentRegistrationError('Invalid name'));
