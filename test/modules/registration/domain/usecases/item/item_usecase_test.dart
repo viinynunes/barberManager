@@ -1,4 +1,5 @@
 import 'package:barbar_manager/modules/registration/domain/entities/department.dart';
+import 'package:barbar_manager/modules/registration/domain/entities/establishment.dart';
 import 'package:barbar_manager/modules/registration/domain/entities/item.dart';
 import 'package:barbar_manager/modules/registration/domain/entities/reservation.dart';
 import 'package:barbar_manager/modules/registration/domain/errors/registration_errors.dart';
@@ -13,20 +14,42 @@ main() {
   final repository = MockItemRepository();
   final usecase = ItemUsecaseImpl(repository);
   final department = Department('id', 'Shop', 'All products', true);
-  final reservation = Reservation(
-      'ID',
-      'Wash masculine hair',
-      'Wash masculine hair with shampoo',
-      15.00,
-      'https://google.images.com/shampoo.png',
-      DateTime.now(),
-      true,
-      department,
-      DateTime(2022, 06, 1, 15, 30));
+  late Establishment establishment;
+  late Reservation reservation;
+  late Item item;
 
-  setUpAll(() {
-    final item = Item('id', 'shampoo', 'shampoo for man', 20.00,
-        'https://google.images.com/shampoo', DateTime.now(), true, department);
+  setUp(() {
+    establishment = Establishment(
+        'id',
+        'Barber Shop Alphas',
+        'alphas@gmail.com',
+        'alphas hair',
+        'https://image.png',
+        DateTime.now(),
+        DateTime.now());
+
+    reservation = Reservation(
+        'ID',
+        'Wash masculine hair',
+        'Wash masculine hair with shampoo',
+        15.00,
+        'https://google.images.com/shampoo.png',
+        DateTime.now(),
+        true,
+        department,
+        establishment,
+        DateTime(2022, 06, 1, 15, 30));
+
+    item = Item(
+        'id',
+        'shampoo',
+        'shampoo for man',
+        20.00,
+        'https://google.images.com/shampoo',
+        DateTime.now(),
+        true,
+        department,
+        establishment);
 
     when(repository.createOrUpdate(any))
         .thenAnswer((realInvocation) async => Right(item));
@@ -41,15 +64,7 @@ main() {
   group('tests to create or update item usecase', () {
     test('should return an item from repository when everything is validated',
         () async {
-      final result = await usecase.createOrUpdate(Item(
-          'id',
-          'water',
-          'water to wash your hair',
-          5.00,
-          'https://google.images.com/shampoo',
-          DateTime.now(),
-          true,
-          department));
+      final result = await usecase.createOrUpdate(item);
 
       expect(result.fold(id, id), isA<Item>());
       expect(result.fold((l) => null, (r) => r.name), equals('shampoo'));
@@ -57,169 +72,75 @@ main() {
 
     test('should return an ItemRegistrationError when name is invalid',
         () async {
-      var result = await usecase.createOrUpdate(Item(
-          'id',
-          '',
-          'water to wash your hair',
-          5.00,
-          'https://google.images.com/shampoo',
-          DateTime.now(),
-          true,
-          department));
+      item.name = '';
+
+      var result = await usecase.createOrUpdate(item);
 
       expect(result.fold(id, id), isA<ItemRegistrationError>());
 
-      result = await usecase.createOrUpdate(Item(
-          'id',
-          '2',
-          'water to wash your hair',
-          5.00,
-          'https://google.images.com/shampoo',
-          DateTime.now(),
-          true,
-          department));
+      item.name = '2';
+
+      result = await usecase.createOrUpdate(item);
 
       expect(result.fold(id, id), isA<ItemRegistrationError>());
     });
 
     test('should return an ItemRegistrationError when description is invalid',
         () async {
-      final result = await usecase.createOrUpdate(Item(
-          'id',
-          'water',
-          '',
-          5.00,
-          'https://google.images.com/shampoo',
-          DateTime.now(),
-          true,
-          department));
+      item.description = '';
+
+      final result = await usecase.createOrUpdate(item);
 
       expect(result.fold(id, id), isA<ItemRegistrationError>());
     });
 
     test('should return an ItemRegistrationError when price is invalid',
         () async {
-      var result = await usecase.createOrUpdate(Item(
-          'id',
-          'water',
-          'water to wash your hair',
-          -5.00,
-          'https://google.images.com/shampoo',
-          DateTime.now(),
-          true,
-          department));
+      item.price = -5.00;
+
+      var result = await usecase.createOrUpdate(item);
 
       expect(result.fold(id, id), isA<ItemRegistrationError>());
     });
 
     test('should return an ItemRegistrationError when image url is invalid',
         () async {
-      var result = await usecase.createOrUpdate(Item(
-          'id',
-          'water',
-          'water to wash your hair',
-          5.00,
-          '',
-          DateTime.now(),
-          true,
-          department));
+      item.imgUrl = '';
+
+      var result = await usecase.createOrUpdate(item);
 
       expect(result.fold(id, id), isA<ItemRegistrationError>());
     });
 
     test('should return an ItemRegistrationError when Department is invalid',
         () async {
-      final testDep = Department('', 'Shop', 'Shoping something', true);
-      var result = await usecase.createOrUpdate(Item('id', 'water',
-          'water to wash your hair', 5.00, '', DateTime.now(), true, testDep));
+      department.id = '';
+
+      var result = await usecase.createOrUpdate(item);
 
       expect(result.fold(id, id), isA<ItemRegistrationError>());
 
-      final testDepDisable =
-          Department('aaaaa', 'Shop', 'Shoping something', false);
+      department.id = 'aaaa';
+      department.enabled = false;
 
-      result = await usecase.createOrUpdate(Item(
-          'id',
-          'water',
-          'water to wash your hair',
-          5.00,
-          '',
-          DateTime.now(),
-          true,
-          testDepDisable));
-
-      expect(result.fold(id, id), isA<ItemRegistrationError>());
-    });
-
-    test(
-        'should return an ItemRegistrationError when registration Date is has a negative number',
-        () async {
-      var result = await usecase.createOrUpdate(Item(
-          'id',
-          'water',
-          'water to wash your hair',
-          5.00,
-          '',
-          DateTime(-2022, 10, 2),
-          true,
-          department));
-
-      expect(result.fold(id, id), isA<ItemRegistrationError>());
-
-      result = await usecase.createOrUpdate(Item(
-          'id',
-          'water',
-          'water to wash your hair',
-          5.00,
-          '',
-          DateTime(2022, -10, 2),
-          true,
-          department));
-
-      expect(result.fold(id, id), isA<ItemRegistrationError>());
-
-      result = await usecase.createOrUpdate(Item(
-          'id',
-          'water',
-          'water to wash your hair',
-          5.00,
-          '',
-          DateTime(2022, 10, 2),
-          true,
-          department));
+      result = await usecase.createOrUpdate(item);
 
       expect(result.fold(id, id), isA<ItemRegistrationError>());
     });
   });
 
   group('tests to disable item usecase', () {
-    final testDep = Department('aaaa', 'Shop', 'Shop products', true);
-
     test('should disable and item when everything is correct', () async {
-      final result = await usecase.disable(Item(
-          'id',
-          'shampoo',
-          'shampoo for man',
-          5,
-          'https://google.images.com/shampoo.png',
-          DateTime.now(),
-          true,
-          testDep));
+      final result = await usecase.disable(item);
 
       expect(result.fold(id, id), isA<bool>());
       expect(result.fold(id, id), equals(true));
     });
 
     test('should return an ItemRegistrationError when ID is empty', () async {
-      final result = await usecase.disable(Item(
-          '',
-          'Shampoo',
-          'Shampoo for man',
-          5,
-          'https://google.images.com/shampoo.png',
-          DateTime.now(),
-          true,
-          testDep));
+      item.id = '';
+
+      final result = await usecase.disable(item);
 
       expect(result, isA<Left>());
       expect(result.fold(id, id), isA<ItemRegistrationError>());
@@ -227,15 +148,9 @@ main() {
 
     test('should return an ItemRegistrationError when item is already disabled',
         () async {
-      final result = await usecase.disable(Item(
-          'aaaa',
-          'Shampoo',
-          'Shampoo for man',
-          5,
-          'https://google.images.com/shampoo.png',
-          DateTime.now(),
-          false,
-          testDep));
+      item.enabled = false;
+
+      final result = await usecase.disable(item);
 
       expect(result, isA<Left>());
       expect(result.fold(id, id), isA<ItemRegistrationError>());
