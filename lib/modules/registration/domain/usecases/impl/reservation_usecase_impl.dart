@@ -13,7 +13,7 @@ class ReservationItemUsecaseImpl implements ItemUsecase {
   ReservationItemUsecaseImpl(this._repository);
 
   @override
-  Future<Either<RegistrationErrors, Item>> createOrUpdate(
+  Future<Either<ItemRegistrationError, Item>> createOrUpdate(
       Item reservationItem) async {
     var result = _validator.createOrUpdateValidation(reservationItem);
 
@@ -32,7 +32,7 @@ class ReservationItemUsecaseImpl implements ItemUsecase {
   }
 
   @override
-  Future<Either<RegistrationErrors, bool>> disable(Item reservation) async {
+  Future<Either<ItemRegistrationError, bool>> disable(Item reservation) async {
     var result = _validator.disableValidation(reservation);
 
     if (result.isLeft()) {

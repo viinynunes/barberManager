@@ -3,7 +3,7 @@ import 'package:barbar_manager/modules/registration/domain/errors/registration_e
 import 'package:dartz/dartz.dart';
 
 abstract class ItemRepository {
-  Future<Either<RegistrationErrors, Item>> createOrUpdate(Item item);
+  Future<Either<ItemRegistrationError, Item>> createOrUpdate(Item item);
 
-  Future<Either<RegistrationErrors, bool>> disable(Item item);
+  Future<Either<ItemRegistrationError, bool>> disable(Item item);
 }

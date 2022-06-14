@@ -147,18 +147,19 @@ class MockItemRepository extends _i1.Mock implements _i13.ItemRepository {
   }
 
   @override
-  _i4.Future<_i2.Either<_i5.RegistrationErrors, _i14.Item>> createOrUpdate(
+  _i4.Future<_i2.Either<_i5.ItemRegistrationError, _i14.Item>> createOrUpdate(
           _i14.Item? item) =>
       (super.noSuchMethod(Invocation.method(#createOrUpdate, [item]),
-              returnValue:
-                  Future<_i2.Either<_i5.RegistrationErrors, _i14.Item>>.value(
-                      _FakeEither_0<_i5.RegistrationErrors, _i14.Item>()))
-          as _i4.Future<_i2.Either<_i5.RegistrationErrors, _i14.Item>>);
+          returnValue:
+              Future<_i2.Either<_i5.ItemRegistrationError, _i14.Item>>.value(
+                  _FakeEither_0<_i5.ItemRegistrationError, _i14.Item>())) as _i4
+          .Future<_i2.Either<_i5.ItemRegistrationError, _i14.Item>>);
   @override
-  _i4.Future<_i2.Either<_i5.RegistrationErrors, bool>> disable(
+  _i4.Future<_i2.Either<_i5.ItemRegistrationError, bool>> disable(
           _i14.Item? item) =>
       (super.noSuchMethod(Invocation.method(#disable, [item]),
-          returnValue: Future<_i2.Either<_i5.RegistrationErrors, bool>>.value(
-              _FakeEither_0<_i5.RegistrationErrors, bool>())) as _i4
-          .Future<_i2.Either<_i5.RegistrationErrors, bool>>);
+              returnValue:
+                  Future<_i2.Either<_i5.ItemRegistrationError, bool>>.value(
+                      _FakeEither_0<_i5.ItemRegistrationError, bool>()))
+          as _i4.Future<_i2.Either<_i5.ItemRegistrationError, bool>>);
 }

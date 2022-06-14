@@ -12,7 +12,7 @@ class ItemUsecaseImpl implements ItemUsecase {
   ItemUsecaseImpl(this._repository);
 
   @override
-  Future<Either<RegistrationErrors, Item>> createOrUpdate(Item item) async {
+  Future<Either<ItemRegistrationError, Item>> createOrUpdate(Item item) async {
     final result = _validator.createOrUpdateValidation(item);
 
     if (result.isLeft()) {
@@ -23,7 +23,7 @@ class ItemUsecaseImpl implements ItemUsecase {
   }
 
   @override
-  Future<Either<RegistrationErrors, bool>> disable(Item item) async {
+  Future<Either<ItemRegistrationError, bool>> disable(Item item) async {
     final result = _validator.disableValidation(item);
 
     if (result.isLeft()) {
