@@ -1,8 +1,9 @@
 import 'package:barbar_manager/modules/registration/domain/entities/department.dart';
+import 'package:barbar_manager/modules/registration/domain/entities/establishment.dart';
 import 'package:barbar_manager/modules/registration/domain/entities/item.dart';
 
 class Reservation extends Item {
-  final DateTime reservationDate;
+  DateTime reservationDate;
 
   Reservation(
       String id,
@@ -13,7 +14,8 @@ class Reservation extends Item {
       DateTime registrationDate,
       bool enabled,
       Department department,
+      Establishment establishment,
       this.reservationDate)
       : super(id, name, description, price, imgUrl, registrationDate, enabled,
-            department);
+            department, establishment);
 }
