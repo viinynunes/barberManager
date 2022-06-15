@@ -8,19 +8,33 @@ import '../../errors/registration_errors.dart';
 class ValidateReservationFields extends ValidateItemFields {
   Either<ItemRegistrationError, Item> registrationHourValidation(
       Reservation reservation) {
-    if (reservation.reservationDate.isBefore(DateTime.now())) {
-      return Left(ItemRegistrationError('Date cannot be before now'));
-    }
+    if (reservation.establishment.openTime != null &&
+        reservation.establishment.closeTime != null) {
+      final reservationHour = reservation.reservationDate;
 
-    if (reservation.reservationDate.day.isNegative ||
-        reservation.reservationDate.month.isNegative ||
-        reservation.reservationDate.year.isNegative) {
-      return Left(ItemRegistrationError('Date cannot be negative'));
-    }
+      if (reservationHour.hour >= reservation.establishment.openTime!.hour) {
+        if (reservationHour.hour <= reservation.establishment.openTime!.hour &&
+            reservationHour.minute <
+                reservation.establishment.openTime!.minute) {
+          return Left(ItemRegistrationError(
+              'ReservationDate cannot be before establishment open time'));
+        }
+      } else {
+        return Left(ItemRegistrationError(
+            'ReservationDate cannot be before establishment open time'));
+      }
 
-    if (reservation.reservationDate.hour.isNegative ||
-        reservation.reservationDate.minute.isNegative) {
-      return Left(ItemRegistrationError('Hour or minute cannot be negative'));
+      if (reservationHour.hour <= reservation.establishment.closeTime!.hour) {
+        if (reservationHour.hour >= reservation.establishment.closeTime!.hour &&
+            reservationHour.minute >
+                reservation.establishment.closeTime!.minute) {
+          return Left(ItemRegistrationError(
+              'ReservationDate cannot be before establishment close time'));
+        }
+      } else {
+        return Left(ItemRegistrationError(
+            'ReservationDate cannot be before establishment close time'));
+      }
     }
 
     if (reservation.reservationDate.year == 0 ||
@@ -31,6 +45,10 @@ class ValidateReservationFields extends ValidateItemFields {
 
     if (reservation.reservationDate.hour == 0) {
       return Left(ItemRegistrationError('Hour cannot be empty'));
+    }
+
+    if (reservation.reservationDate.isBefore(DateTime.now())) {
+      return Left(ItemRegistrationError('Date cannot be before now'));
     }
 
     return Right(reservation);
