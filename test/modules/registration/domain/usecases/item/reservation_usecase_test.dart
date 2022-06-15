@@ -1,4 +1,5 @@
 import 'package:barbar_manager/modules/registration/domain/entities/department.dart';
+import 'package:barbar_manager/modules/registration/domain/entities/establishment.dart';
 import 'package:barbar_manager/modules/registration/domain/entities/item.dart';
 import 'package:barbar_manager/modules/registration/domain/entities/reservation.dart';
 import 'package:barbar_manager/modules/registration/domain/errors/registration_errors.dart';
@@ -12,17 +13,34 @@ import '../../repositories/repositories_mock.mocks.dart';
 main() {
   final repository = MockItemRepository();
   final usecase = ReservationItemUsecaseImpl(repository);
-  final department = Department('id', 'Hairdresser', 'hair cuts', true);
-  final reservation = Reservation(
-      'id',
-      'Cut masculine hair',
-      'shaved cut',
-      25.00,
-      'https://shaved.png',
-      DateTime.now(),
-      true,
-      department,
-      DateTime(2022, 06, 10, 15, 30));
+  late Department department;
+  late Establishment establishment;
+  late Reservation reservation;
+
+  setUp(() {
+    final now = DateTime.now();
+    department = Department('id', 'Hairdresser', 'hair cuts', true);
+    establishment = Establishment(
+        'id',
+        'Barber Shop Alphas',
+        'alphas@gmail.com',
+        'alphas hair',
+        'https://image.pns',
+        DateTime(now.year, now.month, now.day, 08, 30),
+        DateTime(now.year, now.month, now.day, 18, 30));
+
+    reservation = Reservation(
+        'id',
+        'Cut masculine hair',
+        'shaved cut',
+        25.00,
+        'https://shaved.png',
+        DateTime.now(),
+        true,
+        department,
+        establishment,
+        DateTime(2022, 6, 20, 12, 30));
+  });
 
   setUpAll(() {
     when(repository.createOrUpdate(any))
@@ -57,6 +75,7 @@ main() {
           DateTime.now(),
           true,
           department,
+          establishment,
           DateTime(2022, 10, 5),
         ),
       );
@@ -73,6 +92,7 @@ main() {
           DateTime.now(),
           true,
           department,
+          establishment,
           DateTime(2022, 10, 5, 0),
         ),
       );
@@ -89,11 +109,68 @@ main() {
           DateTime.now(),
           true,
           department,
+          establishment,
           DateTime(2022, 10, 5, 0, 30),
         ),
       );
 
       expect(result.fold(id, id), isA<ItemRegistrationError>());
+    });
+
+    test(
+        'Should return a ItemRegistrationError when reservation hour or minute date is before establishment open time',
+        () async {
+      reservation.reservationDate = DateTime(2022, 06, 16, 07, 30);
+
+      var result = await usecase.createOrUpdate(reservation);
+
+      expect(result.fold(id, id), isA<ItemRegistrationError>());
+      expect(result.fold((l) => l.message, (r) => null),
+          equals('ReservationDate cannot be before establishment open time'));
+
+      reservation.reservationDate = DateTime(2022, 06, 16, 08, 00);
+
+      result = await usecase.createOrUpdate(reservation);
+
+      expect(result.fold(id, id), isA<ItemRegistrationError>());
+      expect(result.fold((l) => l.message, (r) => null),
+          equals('ReservationDate cannot be before establishment open time'));
+
+      reservation.reservationDate = DateTime(2022, 06, 16, 08, 29);
+
+      result = await usecase.createOrUpdate(reservation);
+
+      expect(result.fold(id, id), isA<ItemRegistrationError>());
+      expect(result.fold((l) => l.message, (r) => null),
+          equals('ReservationDate cannot be before establishment open time'));
+    });
+
+    test(
+        'Should return a ItemRegistrationError when reservation hour or minute date is after establishment close time',
+        () async {
+      reservation.reservationDate = DateTime(2022, 06, 16, 19, 00);
+
+      var result = await usecase.createOrUpdate(reservation);
+
+      expect(result.fold(id, id), isA<ItemRegistrationError>());
+      expect(result.fold((l) => l.message, (r) => null),
+          equals('ReservationDate cannot be before establishment close time'));
+
+      reservation.reservationDate = DateTime(2022, 06, 16, 18, 50);
+
+      result = await usecase.createOrUpdate(reservation);
+
+      expect(result.fold(id, id), isA<ItemRegistrationError>());
+      expect(result.fold((l) => l.message, (r) => null),
+          equals('ReservationDate cannot be before establishment close time'));
+
+      reservation.reservationDate = DateTime(2022, 06, 16, 18, 31);
+
+      result = await usecase.createOrUpdate(reservation);
+
+      expect(result.fold(id, id), isA<ItemRegistrationError>());
+      expect(result.fold((l) => l.message, (r) => null),
+          equals('ReservationDate cannot be before establishment close time'));
     });
   });
 
@@ -115,13 +192,15 @@ main() {
           DateTime.now(),
           true,
           department,
+          establishment,
           DateTime.now()));
 
       expect(result, isA<Left>());
       expect(result.fold(id, id), isA<ItemRegistrationError>());
     });
 
-    test('should return an ItemRegistrationError when item is already disabled',
+    test(
+        'should return an ItemRegistrationError when reservation is already disabled',
         () async {
       final result = await usecase.disable(Reservation(
           'aaaa',
@@ -132,6 +211,7 @@ main() {
           DateTime.now(),
           false,
           department,
+          establishment,
           DateTime.now()));
 
       expect(result, isA<Left>());
