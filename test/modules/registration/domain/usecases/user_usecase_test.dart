@@ -11,18 +11,22 @@ import '../repositories/repositories_mock.mocks.dart';
 main() {
   final repository = MockUserRepository();
   final usecase = UserUsecaseImpl(repository);
-  final establishment = Establishment(
-      'id',
-      'tourus',
-      'taurus@gmail.com',
-      'taurus barbar shop',
-      'https://google.images.com/barber',
-      DateTime.now(),
-      DateTime.now());
+  late Establishment establishment;
+  late User user;
 
-  setUpAll(() {
-    final user = User(
-        'id', 'Vinicius Nunes', 'nunes@gmail.com', '123', establishment, true);
+  setUp(() {
+    establishment = Establishment(
+        'id',
+        'tourus',
+        'taurus@gmail.com',
+        'taurus barbar shop',
+        'https://google.images.com/barber',
+        DateTime.now(),
+        DateTime.now());
+
+    user = User(
+        'id', 'Vinicius Nunes', 'nunes@gmail.com', '123456', establishment, true);
+
     when(repository.createOrUpdate(any))
         .thenAnswer((realInvocation) async => Right(user));
 
@@ -33,8 +37,7 @@ main() {
   group('tests to create or update method on usecase', () {
     test('should return a user when everything is validated on usecase',
         () async {
-      final result = await usecase.createOrUpdate(User(
-          'id', 'ze ramalho', 'ze@gmail.com', '456786', establishment, true));
+      final result = await usecase.createOrUpdate(user);
 
       expect(result.fold(id, id), isA<User>());
       expect(result.fold((l) => null, (r) => r.fullName),
@@ -43,69 +46,97 @@ main() {
 
     test('should return a UserRegistrationError when email is invalid',
         () async {
-      var result = await usecase.createOrUpdate(
-          User('id', 'ze ramalho', 'ze@gmail', '456786', establishment, true));
+      user.email = 'ze@gmail';
+
+      var result = await usecase.createOrUpdate(user);
 
       expect(result.fold(id, id), isA<UserRegistrationError>());
+      expect(
+          result.fold((l) => l.message, (r) => null), equals('Invalid Email'));
 
-      result = await usecase.createOrUpdate(User(
-          'id', 'ze ramalho', 'zegmail.com', '456786', establishment, true));
+      user.email = 'zegmail.com';
+
+      result = await usecase.createOrUpdate(user);
 
       expect(result.fold(id, id), isA<UserRegistrationError>());
+      expect(
+          result.fold((l) => l.message, (r) => null), equals('Invalid Email'));
     });
 
     test('should return a UserRegistrationError when fullName is invalid',
         () async {
-      var result = await usecase.createOrUpdate(
-          User('id', 'A', 'viny@gmail.com', '123456', establishment, true));
-      expect(result.fold(id, id), isA<UserRegistrationError>());
+      user.fullName = 'A';
 
-      result = await usecase.createOrUpdate(
-          User('id', '', 'viny@gmail.com', '123456', establishment, true));
+      var result = await usecase.createOrUpdate(user);
+
       expect(result.fold(id, id), isA<UserRegistrationError>());
+      expect(result.fold((l) => l.message, (r) => null),
+          equals('Invalid Full Name'));
+
+      user.fullName = '';
+
+      result = await usecase.createOrUpdate(user);
+
+      expect(result.fold(id, id), isA<UserRegistrationError>());
+      expect(result.fold((l) => l.message, (r) => null),
+          equals('Invalid Full Name'));
     });
 
     test('should return a UserRegistrationError when password is invalid',
         () async {
-      var result = await usecase.createOrUpdate(User(
-          'id', 'ze ramalho', 'ze@gmail.com', '12345', establishment, true));
+      user.password = '12345';
+
+      var result = await usecase.createOrUpdate(user);
 
       expect(result.fold(id, id), isA<UserRegistrationError>());
+      expect(result.fold((l) => l.message, (r) => null),
+          equals('Invalid Password'));
 
-      result = await usecase.createOrUpdate(
-          User('id', 'ze ramalho', 'ze@gmail.com', 'aa', establishment, true));
+      user.password = 'aa';
 
-      expect(result.fold(id, id), isA<UserRegistrationError>());
-
-      result = await usecase.createOrUpdate(
-          User('id', 'ze ramalho', 'ze@gmail.com', '', establishment, true));
+      result = await usecase.createOrUpdate(user);
 
       expect(result.fold(id, id), isA<UserRegistrationError>());
+      expect(result.fold((l) => l.message, (r) => null),
+          equals('Invalid Password'));
+
+      user.password = '';
+
+      result = await usecase.createOrUpdate(user);
+
+      expect(result.fold(id, id), isA<UserRegistrationError>());
+      expect(result.fold((l) => l.message, (r) => null),
+          equals('Invalid Password'));
     });
   });
 
   group('tests to disable user on usecase', () {
     test('should disable a valid user', () async {
-      final result = await usecase.disable(User('id', 'Vinicius Nunes',
-          'viny@gmail.com', '123456', establishment, true));
+      final result = await usecase.disable(user);
 
       expect(result.fold(id, id), isA<bool>());
       expect(result.fold((l) => null, (r) => r), equals(true));
     });
 
     test('should return a UserRegistrationError when ID is invalid', () async {
-      final result = await usecase.disable(User('', 'Vinicius Nunes',
-          'viny@gmail.com', '123456', establishment, true));
+      user.id = '';
+
+      final result = await usecase.disable(user);
 
       expect(result.fold(id, id), isA<UserRegistrationError>());
+      expect(result.fold((l) => l.message, (r) => null),
+          equals('User without id in database'));
     });
 
     test('should return a UserRegistrationError when enabled is already false',
         () async {
-      final result = await usecase.disable(User('1', 'Vinicius Nunes',
-          'viny@gmail.com', '123456', establishment, false));
+      user.enabled = false;
+
+      final result = await usecase.disable(user);
 
       expect(result.fold(id, id), isA<UserRegistrationError>());
+      expect(result.fold((l) => l.message, (r) => null),
+          equals('User already disabled'));
     });
   });
 }
