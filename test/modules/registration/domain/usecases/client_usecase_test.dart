@@ -13,12 +13,15 @@ main() {
   late Client client;
 
   setUp(() {
-    client = Client('Nunes', '19981436342', 'viny@gmail.com', true);
+    client = Client('', 'Nunes', '19981436342', 'viny@gmail.com', true);
     when(repository.createOrUpdate(any))
         .thenAnswer((realInvocation) async => Right(client));
 
     when(repository.delete(any))
         .thenAnswer((realInvocation) async => const Right(true));
+
+    when(repository.findByID(any))
+        .thenAnswer((realInvocation) async => Right(client));
   });
 
   group('tests to create or update a client', () {
@@ -62,8 +65,7 @@ main() {
 
   group('tests to delete a client', () {
     test('should return true when try to delete a client', () async {
-      final result = await useCase
-          .delete(Client('nunes', '19981436342', 'viny@hotmail.com', true));
+      final result = await useCase.delete(client);
 
       expect(result.fold(id, id), isA<bool>());
       expect(result.fold(id, id), equals(true));
@@ -79,6 +81,23 @@ main() {
       expect(result.fold(id, id), isA<ClientRegistrationError>());
       expect(result.fold((l) => l.message, (r) => null),
           equals('Client already disabled'));
+    });
+  });
+
+  group('tests to client findByID method', () {
+    test('should return a client', () async {
+      final result = await useCase.findByID('aaaaaa');
+
+      expect(result.fold(id, id), isA<Client>());
+      expect(result.fold((l) => null, (r) => r.name), equals('Nunes'));
+    });
+
+    test('should return a ClientRegistrationError when ID is empty', () async {
+      final result = await useCase.findByID('');
+
+      expect(result.fold(id, id), isA<ClientRegistrationError>());
+      expect(result.fold((l) => l.message, (r) => null),
+          equals('Client ID is empty'));
     });
   });
 }
