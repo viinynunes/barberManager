@@ -1,9 +1,9 @@
 abstract class RegistrationErrors implements Exception {}
 
-class ClientValidatorError implements RegistrationErrors {
+class ClientRegistrationError implements RegistrationErrors {
   final String message;
 
-  ClientValidatorError(this.message);
+  ClientRegistrationError(this.message);
 }
 
 class UserRegistrationError implements RegistrationErrors {
