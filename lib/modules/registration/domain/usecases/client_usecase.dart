@@ -7,4 +7,8 @@ abstract class ClientUsecase {
   Future<Either<ClientRegistrationError, Client>> createOrUpdate(Client client);
 
   Future<Either<ClientRegistrationError, bool>> delete(Client client);
+
+  Future<Either<ClientRegistrationError, List<Client>>> findAll();
+
+  Future<Either<ClientRegistrationError, Client>> findByID(String id);
 }
