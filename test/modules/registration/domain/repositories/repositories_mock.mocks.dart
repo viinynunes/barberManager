@@ -50,20 +50,21 @@ class MockClientRepository extends _i1.Mock implements _i3.ClientRepository {
   }
 
   @override
-  _i4.Future<_i2.Either<_i5.RegistrationErrors, _i6.Client>> createOrUpdate(
-          _i6.Client? client) =>
-      (super.noSuchMethod(Invocation.method(#createOrUpdate, [client]),
-              returnValue:
-                  Future<_i2.Either<_i5.RegistrationErrors, _i6.Client>>.value(
-                      _FakeEither_0<_i5.RegistrationErrors, _i6.Client>()))
-          as _i4.Future<_i2.Either<_i5.RegistrationErrors, _i6.Client>>);
+  _i4.Future<_i2.Either<_i5.ClientRegistrationError, _i6.Client>>
+      createOrUpdate(_i6.Client? client) => (super.noSuchMethod(
+          Invocation.method(#createOrUpdate, [client]),
+          returnValue: Future<
+                  _i2.Either<_i5.ClientRegistrationError, _i6.Client>>.value(
+              _FakeEither_0<_i5.ClientRegistrationError, _i6.Client>())) as _i4
+          .Future<_i2.Either<_i5.ClientRegistrationError, _i6.Client>>);
   @override
-  _i4.Future<_i2.Either<_i5.RegistrationErrors, bool>> delete(
+  _i4.Future<_i2.Either<_i5.ClientRegistrationError, bool>> delete(
           _i6.Client? client) =>
       (super.noSuchMethod(Invocation.method(#delete, [client]),
-          returnValue: Future<_i2.Either<_i5.RegistrationErrors, bool>>.value(
-              _FakeEither_0<_i5.RegistrationErrors, bool>())) as _i4
-          .Future<_i2.Either<_i5.RegistrationErrors, bool>>);
+              returnValue:
+                  Future<_i2.Either<_i5.ClientRegistrationError, bool>>.value(
+                      _FakeEither_0<_i5.ClientRegistrationError, bool>()))
+          as _i4.Future<_i2.Either<_i5.ClientRegistrationError, bool>>);
 }
 
 /// A class which mocks [UserRepository].
