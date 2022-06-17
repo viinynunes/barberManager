@@ -12,7 +12,7 @@ class ClientUsecaseImpl implements ClientUsecase {
   ClientUsecaseImpl(this._repository);
 
   @override
-  Future<Either<RegistrationErrors, Client>> createOrUpdate(
+  Future<Either<ClientRegistrationError, Client>> createOrUpdate(
       Client client) async {
     final validator = ValidateClientFields.createOrUpdateValidator(client);
 
@@ -24,7 +24,7 @@ class ClientUsecaseImpl implements ClientUsecase {
   }
 
   @override
-  Future<Either<RegistrationErrors, bool>> delete(Client client) async {
+  Future<Either<ClientRegistrationError, bool>> delete(Client client) async {
     final validator = ValidateClientFields.disableValidator(client);
 
     if (validator.isLeft()) {
