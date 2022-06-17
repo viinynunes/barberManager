@@ -63,61 +63,6 @@ main() {
     });
 
     test(
-        'should return a ItemRegistrationError when registration date is missing hour and/or minute',
-        () async {
-      var result = await usecase.createOrUpdate(
-        Reservation(
-          'id',
-          'Woman Hair',
-          'V cut',
-          65,
-          'https://womanhair.png',
-          DateTime.now(),
-          true,
-          department,
-          establishment,
-          DateTime(2022, 10, 5),
-        ),
-      );
-
-      expect(result.fold(id, id), isA<ItemRegistrationError>());
-
-      result = await usecase.createOrUpdate(
-        Reservation(
-          'id',
-          'Woman Hair',
-          'V cut',
-          65,
-          'https://womanhair.png',
-          DateTime.now(),
-          true,
-          department,
-          establishment,
-          DateTime(2022, 10, 5, 0),
-        ),
-      );
-
-      expect(result.fold(id, id), isA<ItemRegistrationError>());
-
-      result = await usecase.createOrUpdate(
-        Reservation(
-          'id',
-          'Woman Hair',
-          'V cut',
-          65,
-          'https://womanhair.png',
-          DateTime.now(),
-          true,
-          department,
-          establishment,
-          DateTime(2022, 10, 5, 0, 30),
-        ),
-      );
-
-      expect(result.fold(id, id), isA<ItemRegistrationError>());
-    });
-
-    test(
         'Should return a ItemRegistrationError when reservation hour or minute date is before establishment open time',
         () async {
       reservation.reservationDate = DateTime(2022, 06, 16, 07, 30);
@@ -183,36 +128,21 @@ main() {
     });
 
     test('should return an ItemRegistrationError when ID is empty', () async {
-      final result = await usecase.disable(Reservation(
-          '',
-          'Shampoo',
-          'Shampoo for man',
-          5,
-          'https://google.images.com/shampoo.png',
-          DateTime.now(),
-          true,
-          department,
-          establishment,
-          DateTime.now()));
+      reservation.id = '';
+
+      final result = await usecase.disable(reservation);
 
       expect(result, isA<Left>());
       expect(result.fold(id, id), isA<ItemRegistrationError>());
+      expect(result.fold((l) => l.message, (r) => null), equals('Invalid ID'));
     });
 
     test(
         'should return an ItemRegistrationError when reservation is already disabled',
         () async {
-      final result = await usecase.disable(Reservation(
-          'aaaa',
-          'Shampoo',
-          'Shampoo for man',
-          5,
-          'https://google.images.com/shampoo.png',
-          DateTime.now(),
-          false,
-          department,
-          establishment,
-          DateTime.now()));
+      reservation.enabled = false;
+
+      final result = await usecase.disable(reservation);
 
       expect(result, isA<Left>());
       expect(result.fold(id, id), isA<ItemRegistrationError>());
