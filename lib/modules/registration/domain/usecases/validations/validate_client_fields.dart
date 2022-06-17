@@ -5,7 +5,7 @@ import '../../entities/client.dart';
 import '../../errors/registration_errors.dart';
 
 class ValidateClientFields {
-  static Either<ClientRegistrationError, Client> createOrUpdateValidator(
+  Either<ClientRegistrationError, Client> createOrUpdateValidator(
       Client client) {
     if (!isEmail(client.email)) {
       return Left(ClientRegistrationError('Invalid Email'));
@@ -22,11 +22,19 @@ class ValidateClientFields {
     return Right(client);
   }
 
-  static Either<ClientRegistrationError, bool> disableValidator(Client client) {
+  Either<ClientRegistrationError, bool> disableValidator(Client client) {
     if (!client.enabled) {
       return Left(ClientRegistrationError('Client already disabled'));
     }
 
     return const Right(true);
+  }
+
+  Either<ClientRegistrationError, Client> findByIdValidator(String id) {
+    if (id.isEmpty) {
+      return Left(ClientRegistrationError('Client ID is empty'));
+    }
+
+    return Right(Client('', '', '', '', false));
   }
 }
