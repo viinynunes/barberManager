@@ -10,9 +10,10 @@ import '../repositories/repositories_mock.mocks.dart';
 main() {
   final repository = MockClientRepository();
   final useCase = ClientUsecaseImpl(repository);
+  late Client client;
 
-  setUpAll(() {
-    final client = Client('Nunes', '19981436342', 'viny@gmail.com', true);
+  setUp(() {
+    client = Client('Nunes', '19981436342', 'viny@gmail.com', true);
     when(repository.createOrUpdate(any))
         .thenAnswer((realInvocation) async => Right(client));
 
@@ -21,33 +22,41 @@ main() {
   });
 
   group('tests to create or update a client', () {
-    test('should return a ClientError when name is empty', () async {
-      final result = await useCase
-          .createOrUpdate(Client('', '19981436342', 'viny@gmail.com', true));
-
-      expect(result.fold(id, id), isA<RegistrationErrors>());
-    });
-
-    test('should return a ClientError when email is invalid', () async {
-      final result = await useCase
-          .createOrUpdate(Client('nunes', '19981436342', 'viny@', true));
-
-      expect(result.fold(id, id), isA<RegistrationErrors>());
-    });
-
-    test('should return a ClientError when phone is invalid', () async {
-      final result = await useCase.createOrUpdate(
-          Client('nunes', '22222222a2', 'viny@gmail.com', true));
-
-      expect(result.fold(id, id), isA<RegistrationErrors>());
-    });
-
     test('should return a Client when is a valid client', () async {
-      final result = await useCase.createOrUpdate(
-          Client('viny', '19981436342', 'viny@gmail.com', true));
+      final result = await useCase.createOrUpdate(client);
 
       expect(result.fold(id, id), isA<Client>());
       expect(result.fold((l) => null, (r) => r.name), equals('Nunes'));
+    });
+
+    test('should return a ClientError when name is empty', () async {
+      client.name = '';
+
+      final result = await useCase.createOrUpdate(client);
+
+      expect(result.fold(id, id), isA<RegistrationErrors>());
+      expect(
+          result.fold((l) => l.message, (r) => null), equals('Invalid Name'));
+    });
+
+    test('should return a ClientError when email is invalid', () async {
+      client.email = 'viny@';
+
+      final result = await useCase.createOrUpdate(client);
+
+      expect(result.fold(id, id), isA<RegistrationErrors>());
+      expect(
+          result.fold((l) => l.message, (r) => null), equals('Invalid Email'));
+    });
+
+    test('should return a ClientError when phone is invalid', () async {
+      client.phoneNumber = '22222222a2';
+
+      final result = await useCase.createOrUpdate(client);
+
+      expect(result.fold(id, id), isA<RegistrationErrors>());
+      expect(result.fold((l) => l.message, (r) => null),
+          equals('Invalid Phone Number'));
     });
   });
 
@@ -57,15 +66,19 @@ main() {
           .delete(Client('nunes', '19981436342', 'viny@hotmail.com', true));
 
       expect(result.fold(id, id), isA<bool>());
+      expect(result.fold(id, id), equals(true));
     });
 
     test(
         'should return Client Error when try to delete a client who is already disabled',
         () async {
-      final result = await useCase
-          .delete(Client('nunes', '19981436342', 'viny@hotmail.com', false));
+      client.enabled = false;
 
-      expect(result.fold(id, id), isA<RegistrationErrors>());
+      final result = await useCase.delete(client);
+
+      expect(result.fold(id, id), isA<ClientRegistrationError>());
+      expect(result.fold((l) => l.message, (r) => null),
+          equals('Client already disabled'));
     });
   });
 }
