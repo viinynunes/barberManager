@@ -65,6 +65,22 @@ class MockClientRepository extends _i1.Mock implements _i3.ClientRepository {
                   Future<_i2.Either<_i5.ClientRegistrationError, bool>>.value(
                       _FakeEither_0<_i5.ClientRegistrationError, bool>()))
           as _i4.Future<_i2.Either<_i5.ClientRegistrationError, bool>>);
+  @override
+  _i4.Future<_i2.Either<_i5.ClientRegistrationError, List<_i6.Client>>>
+      findAll() => (super.noSuchMethod(Invocation.method(#findAll, []),
+          returnValue:
+              Future<_i2.Either<_i5.ClientRegistrationError, List<_i6.Client>>>.value(
+                  _FakeEither_0<_i5.ClientRegistrationError,
+                      List<_i6.Client>>())) as _i4
+          .Future<_i2.Either<_i5.ClientRegistrationError, List<_i6.Client>>>);
+  @override
+  _i4.Future<_i2.Either<_i5.ClientRegistrationError, _i6.Client>> findByID(
+          String? id) =>
+      (super.noSuchMethod(Invocation.method(#findByID, [id]),
+          returnValue: Future<
+                  _i2.Either<_i5.ClientRegistrationError, _i6.Client>>.value(
+              _FakeEither_0<_i5.ClientRegistrationError, _i6.Client>())) as _i4
+          .Future<_i2.Either<_i5.ClientRegistrationError, _i6.Client>>);
 }
 
 /// A class which mocks [UserRepository].
