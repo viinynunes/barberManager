@@ -8,16 +8,17 @@ import '../validations/validate_client_fields.dart';
 
 class ClientUsecaseImpl implements ClientUsecase {
   final ClientRepository _repository;
+  final _validator = ValidateClientFields();
 
   ClientUsecaseImpl(this._repository);
 
   @override
   Future<Either<ClientRegistrationError, Client>> createOrUpdate(
       Client client) async {
-    final validator = ValidateClientFields.createOrUpdateValidator(client);
+    final result = _validator.createOrUpdateValidator(client);
 
-    if (validator.isLeft()) {
-      return validator;
+    if (result.isLeft()) {
+      return result;
     }
 
     return await _repository.createOrUpdate(client);
@@ -25,12 +26,28 @@ class ClientUsecaseImpl implements ClientUsecase {
 
   @override
   Future<Either<ClientRegistrationError, bool>> delete(Client client) async {
-    final validator = ValidateClientFields.disableValidator(client);
+    final result = _validator.disableValidator(client);
 
-    if (validator.isLeft()) {
-      return validator;
+    if (result.isLeft()) {
+      return result;
     }
 
     return await _repository.delete(client);
+  }
+
+  @override
+  Future<Either<ClientRegistrationError, List<Client>>> findAll() async {
+    return await _repository.findAll();
+  }
+
+  @override
+  Future<Either<ClientRegistrationError, Client>> findByID(String id) async {
+    final result = _validator.findByIdValidator(id);
+
+    if (result.isLeft()) {
+      return result;
+    }
+
+    return await _repository.findByID(id);
   }
 }
